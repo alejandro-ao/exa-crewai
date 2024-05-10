@@ -46,9 +46,7 @@ class NewsletterGenCrew:
                     # Print attributes based on assumed structure
                     st.write(f"Agent Name: {agent_name}")
                     st.write(f"Tool used: {getattr(action, 'tool', 'Unknown')}")
-                    st.write(
-                        f"Tool input: {getattr(action, 'tool_input', 'Unknown')}"
-                    )
+                    st.write(f"Tool input: {getattr(action, 'tool_input', 'Unknown')}")
                     st.write(f"{getattr(action, 'log', 'Unknown')}")
                     with st.expander("Show observation"):
                         st.markdown(f"Observation\n\n{description}")

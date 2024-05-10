@@ -3,22 +3,21 @@ from newsletter_gen.crew import NewsletterGenCrew
 
 
 class NewsletterGenUI:
-  
-    def load_html_template(self): 
-        with open('src/newsletter_gen/config/newsletter_template.html', 'r') as file:
+
+    def load_html_template(self):
+        with open("src/newsletter_gen/config/newsletter_template.html", "r") as file:
             html_template = file.read()
-            
+
         return html_template
-  
+
     def generate_newsletter(self, topic, personal_message):
         crew = NewsletterGenCrew()
         inputs = {
-            'topic': topic,
-            'personal_message': personal_message,
-            'html_template': self.load_html_template()
+            "topic": topic,
+            "personal_message": personal_message,
+            "html_template": self.load_html_template(),
         }
         return crew.kickoff(inputs=inputs)
-
 
     def newsletter_generation(self):
 
@@ -26,33 +25,31 @@ class NewsletterGenUI:
             st.session_state.newsletter = self.generate_newsletter(
                 st.session_state.topic, st.session_state.personal_message
             )
-            
 
         if st.session_state.newsletter and st.session_state.newsletter != "":
             with st.container():
-              st.write("Newsletter generated successfully!")
-              st.download_button(
-                  label="Download HTML file",
-                  data=st.session_state.newsletter,
-                  file_name="newsletter.html",
-                  mime="text/html",
-              )
-              st.write("Preview:")
-              # st.components.v1.html(
-              #     f"""
-              #     <div style="position: relative">
-              #       <div style="overflow-y: scroll; height: 400px; corner-radius: 10px; padding: 25px" >
-              #       {st.session_state.newsletter}
-              #       </div>
-              #       <div class="gradient" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 150px;
-              #                 pointer-events: none;
-              #                 background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));">
-              #       </div>
-              #     </div>
-              #     """,
-              #     height=450,
-              # )
-            
+                st.write("Newsletter generated successfully!")
+                st.download_button(
+                    label="Download HTML file",
+                    data=st.session_state.newsletter,
+                    file_name="newsletter.html",
+                    mime="text/html",
+                )
+                st.write("Preview:")
+                # st.components.v1.html(
+                #     f"""
+                #     <div style="position: relative">
+                #       <div style="overflow-y: scroll; height: 400px; corner-radius: 10px; padding: 25px" >
+                #       {st.session_state.newsletter}
+                #       </div>
+                #       <div class="gradient" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 150px;
+                #                 pointer-events: none;
+                #                 background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));">
+                #       </div>
+                #     </div>
+                #     """,
+                #     height=450,
+                # )
 
     def sidebar(self):
         with st.sidebar:
@@ -92,7 +89,7 @@ class NewsletterGenUI:
             st.session_state.generating = False
 
         self.sidebar()
-        
+
         self.newsletter_generation()
 
 
