@@ -1,0 +1,81 @@
+research_task:
+  description: >
+    Conduct a thorough research about the latest news on {topic}. Be sure to look for sources that are reliable and publish recent news. Do not include articles that are not news material or that are not directly related to {topic}.
+    With this research, compile a list of the most relevant news stories that you found. 
+
+    Follow these rules:
+    - Only include articles that are especially relevant to {topic}. Do not include any news that are not directly related to {topic}. 
+    - Do not include sources that are not a news article. If the content of the page includes a list of articles or looks like the front page of a website, do not include it in the list!
+    - Summarize the news in a few sentences. Make the summary as long as necessary to include all the relevant information, but not too long for a newsletter.
+    - Include the URL of the article where you found the news.
+    - Include a minimum of 7 news articles and a maximum of 10 news articles in the list.
+    - When using the Search Tool, your search query should be concise (for example, "latest news on {topic}").
+
+    IMPORTANT INSTRUCTIONS ABOUT USING TOOLS: When using tools, DO NOT ESCAPE the underscore character "_", EVER. If you need to use a tool and pass in a parameter called 'search_query', you should write 'search_query', not 'search\_query'. THIS IS VERY IMPORTANT, else the tool will not work.
+
+  expected_output: >
+    A markdown document with the most relevant news stories. Each news story should contain the following:
+    - Title of the news
+    - Summary of the news
+    - URL of the article where the news was found
+
+    Here is an example of the format of a news article that you could include in the document:
+    
+    <EXAMPLE>
+      Story 1:
+      - Title: **Daily briefing: AI now beats humans at basic reading and maths**
+      - **Summary:** AI systems can now nearly match and sometimes exceed human performance in basic tasks. The report discusses the need for new benchmarks to assess AI capabilities and highlights the ethical considerations for AI models.
+      - **URL:** [Nature Article](https://www.nature.com/articles/d41586-024-01125-1)
+    </EXAMPLE>
+
+edit_task:
+  description: >
+    Given the list of news articles that will be used in the newsletter, do the following things:
+    
+    - Rewrite the title of each news article to make it more engaging and interesting for the readers of the newsletter.
+    - Add a paragraph to each news article that explains why this news is important and how it can impact the readers of the newsletter.
+    - Reorder the bullet points in a way that the most relevant news and topics are at the top of the list based on the importance of the news and topics.
+    - Verify that the news articles are directly related to {topic} and that they are not off-topic. If they are off-topic, remove them from the list.
+    - Verify that the URLs are correct and that they lead to the correct news article. They should lead to a news article and not to a list of articles or the front page of a website. If the URL is incorrect, ask the researcher to provide the correct URL.
+    - Do not search for additional news articles or change the content of the news articles. Only edit the existing news articles.
+
+    IMPORTANT INSTRUCTIONS ABOUT USING TOOLS: When using tools, DO NOT ESCAPE the underscore character "_", EVER. If you need to use a tool and pass in a parameter called 'search_query', you should write 'search_query', not 'search\_query'. THIS IS VERY IMPORTANT, else the tool will not work.
+
+  expected_output: >
+    A markdown document with all the news to be included in the newsletter of the week. The document should have a title related to the curated stories of the week and a list of news articles.
+    
+    Each one should contain:
+    - Title:
+    - Summary: 
+    - Why this is important:
+    - Source: [URL of the article]
+
+    Here is an example of a document that you are expected to produce:
+    <EXAMPLE>
+    Title of the day: AI is taking over the world
+
+      - **Title:** AI Surpasses Human Capabilities in Basic Reading and Maths
+        **Summary:** Recent advancements in AI technology have enabled systems to match and sometimes exceed human performance in fundamental tasks such as reading and arithmetic. This shift necessitates the creation of new benchmarks to appropriately evaluate AI capabilities.
+        **Why this is important:** This development is crucial as it not only showcases the rapid progress in AI but also prompts a reevaluation of how AI is integrated into educational and professional settings. It raises significant ethical questions about the future role of AI in society.
+        **Source:** "Title of the article" by ["Source"](https://www.nature.com/articles/d41586-024-01125-1)
+
+        [... more news articles ...]
+
+    </EXAMPLE>
+
+newsletter_task:
+  description: >
+    Fill the following HTML template with exactly the same information that is given to you. Also, include the following personal message at the beginning of the newsletter in the space provided: {personal_message}
+
+    (If there is no personal message, leave the space empty.)
+    
+    Follow these rules:
+    - Do not truncate the information or change the order of the elements. 
+    - Do not modify the content of the news articles.
+    - Do not add any additional information to the newsletter.
+    - Add ALL the news stories provided to the newsletter. Even if the template only shows one news story, you should include all the news stories provided as context using the format provided in the template.
+
+    {html_template}
+  expected_output: >
+    Return ONLY the contents of the HTML template, without any tripple quotes like '```', '```html' or any other text. 
+    This output will be saved as a HTML file and sent to the subscribers.
