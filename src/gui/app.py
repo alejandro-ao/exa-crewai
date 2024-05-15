@@ -11,13 +11,12 @@ class NewsletterGenUI:
         return html_template
 
     def generate_newsletter(self, topic, personal_message):
-        crew = NewsletterGenCrew()
         inputs = {
             "topic": topic,
             "personal_message": personal_message,
             "html_template": self.load_html_template(),
         }
-        return crew.kickoff(inputs=inputs)
+        return NewsletterGenCrew().crew().kickoff(inputs=inputs)
 
     def newsletter_generation(self):
 
