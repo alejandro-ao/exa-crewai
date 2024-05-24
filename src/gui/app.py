@@ -34,21 +34,7 @@ class NewsletterGenUI:
                     file_name="newsletter.html",
                     mime="text/html",
                 )
-                st.write("Preview:")
-                # st.components.v1.html(
-                #     f"""
-                #     <div style="position: relative">
-                #       <div style="overflow-y: scroll; height: 400px; corner-radius: 10px; padding: 25px" >
-                #       {st.session_state.newsletter}
-                #       </div>
-                #       <div class="gradient" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 150px;
-                #                 pointer-events: none;
-                #                 background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));">
-                #       </div>
-                #     </div>
-                #     """,
-                #     height=450,
-                # )
+            st.session_state.generating = False
 
     def sidebar(self):
         with st.sidebar:

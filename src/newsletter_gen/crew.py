@@ -8,6 +8,8 @@ import streamlit as st
 from typing import Union, List, Tuple, Dict
 from langchain_core.agents import AgentFinish
 import json
+from langchain_google_genai import ChatGoogleGenerativeAI
+import os
 
 
 @CrewBase
@@ -21,6 +23,7 @@ class NewsletterGenCrew:
         llm = ChatAnthropic(model_name="claude-3-sonnet-20240229", max_tokens=4096)
         # llm = ChatGroq(model="llama3-70b-8192")
         # llm = ChatGroq(model="mixtral-8x7b-32768")
+        # llm = ChatGoogleGenerativeAI(google_api_key=os.getenv("GOOGLE_API_KEY"))
 
         return llm
 
