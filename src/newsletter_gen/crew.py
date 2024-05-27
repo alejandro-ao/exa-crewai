@@ -1,4 +1,5 @@
 import json
+import os
 from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
@@ -22,13 +23,18 @@ class NewsletterGenCrew:
     NewsletterGen crew
 
     Attributes:
+        current_file_path (Path): The current file path.
         agents_config (str): The path to the agents configuration file.
         tasks_config (str): The path to the tasks configuration file.
+        agents_config_data (Dict): The agents configuration data.
+        tasks_config_data (Dict): The tasks configuration data.
 
     """
 
-    agents_config = Path("config/agents.yaml")
-    tasks_config = Path("config/tasks.yaml")
+    current_file_path = Path(__file__).parent
+
+    agents_config = current_file_path / "config/agents.yaml"
+    tasks_config = current_file_path / "config/tasks.yaml"
 
     # Check if the files exist
     if not agents_config.is_file():
@@ -36,6 +42,13 @@ class NewsletterGenCrew:
 
     if not tasks_config.is_file():
         raise FileNotFoundError(f"No such file: '{tasks_config}'")
+
+    # Load the YAML file
+    with agents_config.open(encoding="utf-8") as f:
+        agents_config_data = yaml.safe_load(f)
+
+    with tasks_config.open(encoding="utf-8") as f:
+        tasks_config_data = yaml.safe_load(f)
 
     def llm(
         self,
@@ -47,7 +60,7 @@ class NewsletterGenCrew:
         - llm: Union[ChatOpenAI, ChatAnthropic, ChatGroq, ChatGoogleGenerativeAI]: The language model.
 
         """
-        llm = ChatOpenAI(model="gpt-4o")
+        llm = ChatOpenAI(model_name=os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo"))
         # llm = ChatAnthropic(model_name="claude-3-sonnet-20240229", max_tokens=4096)
         # llm = ChatGroq(model="llama3-70b-8192")
         # llm = ChatGroq(model="mixtral-8x7b-32768")
@@ -112,18 +125,11 @@ class NewsletterGenCrew:
             ValueError: If the researcher is not in the agents_config or the agents_config is not set.
         """
 
-        if not self.agents_config:
-            raise ValueError("agents_config is not set")
-
-        # Load the YAML file
-        with self.agents_config.open() as f:
-            agents_config_data = yaml.safe_load(f)
-
-        if "researcher" not in agents_config_data:
+        if "researcher" not in self.agents_config_data:
             raise ValueError("researcher is not in agents_config")
 
         return Agent(
-            config=self.agents_config["researcher"],  # type: ignore[index]
+            config=self.agents_config_data["researcher"],  # type: ignore[index]
             tools=[SearchAndContents(), FindSimilar(), GetContents()],
             verbose=True,
             llm=self.llm(),
@@ -143,18 +149,11 @@ class NewsletterGenCrew:
                         or "editor" not in the loaded agents_config data.
         """
 
-        if not self.agents_config:
-            raise ValueError("agents_config is not set")
-
-        # Load the YAML file
-        with self.agents_config.open(encoding="utf-8") as f:
-            agents_config_data = yaml.safe_load(f)
-
-        if "editor" not in agents_config_data:
+        if "editor" not in self.agents_config_data:
             raise ValueError("editor is not in agents_config")
 
         return Agent(
-            config=agents_config_data["editor"],
+            config=self.agents_config_data["editor"],
             tools=[SearchAndContents(), FindSimilar(), GetContents()],
             verbose=True,
             llm=self.llm(),
@@ -167,10 +166,17 @@ class NewsletterGenCrew:
         Creates the Designer agent
 
         Returns:
-        - designer: Agent: The Designer agent.
+            designer (Agent): The Designer agent.
+
+        Raises:
+            ValueError: If the designer is not in the agents_config.
+
         """
+        if "designer" not in self.agents_config_data:
+            raise ValueError("designer is not in agents_config")
+
         return Agent(
-            config=self.agents_config["designer"],  # type: ignore[index]
+            config=self.agents_config_data["designer"],  # type: ignore[index]
             verbose=True,
             allow_delegation=False,
             llm=self.llm(),
@@ -183,10 +189,17 @@ class NewsletterGenCrew:
         Creates the Research Task
 
         Returns:
-        - research_task: Task: The Research Task.
+            research_task (Task): The Research Task.
+
+        Raises:
+            ValueError: If the research_task is not in the tasks_config.
         """
+
+        if "research_task" not in self.tasks_config_data:
+            raise ValueError("research_task is not in tasks_config")
+
         return Task(
-            config=self.tasks_config["research_task"],  # type: ignore[index]
+            config=self.tasks_config_data["research_task"],  # type: ignore[index]
             agent=self.researcher(),
             output_file=f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_research_task.md",
         )
@@ -197,11 +210,17 @@ class NewsletterGenCrew:
         Creates the Edit Task
 
         Returns:
-        - edit_task: Task: The Edit Task.
+            edit_task (Task): The Edit Task.
+
+        Raises:
+            ValueError: If the edit_task is not in the tasks_config.
         """
 
+        if "edit_task" not in self.tasks_config_data:
+            raise ValueError("edit_task is not in tasks_config")
+
         return Task(
-            config=self.tasks_config["edit_task"],  # type: ignore[index]
+            config=self.tasks_config_data["edit_task"],  # type: ignore[index]
             agent=self.editor(),
             output_file=f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_edit_task.md",
         )
@@ -212,10 +231,17 @@ class NewsletterGenCrew:
         Creates the Newsletter Task
 
         Returns:
-        - newsletter_task: Task: The Newsletter Task.
+            newsletter_task (Task): The Newsletter Task.
+
+        Raises:
+            ValueError: If the newsletter_task is not in the tasks_config.
         """
+
+        if "newsletter_task" not in self.tasks_config_data:
+            raise ValueError("newsletter_task is not in tasks_config")
+
         return Task(
-            config=self.tasks_config["newsletter_task"],  # type: ignore[index]
+            config=self.tasks_config_data["newsletter_task"],  # type: ignore[index]
             agent=self.designer(),
             output_file=f"logs/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_newsletter_task.html",
         )
@@ -225,7 +251,7 @@ class NewsletterGenCrew:
         """Creates the NewsletterGen crew
 
         Returns:
-        - crew: Crew: The NewsletterGen crew.
+            crew (Crew): The NewsletterGen crew.
         """
         return Crew(
             agents=self.agents,  # type: ignore[attr-defined]  # Automatically created by the @agent decorator

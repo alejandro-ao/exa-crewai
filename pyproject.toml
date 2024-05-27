@@ -21,6 +21,7 @@ pillow = "*"
 python = ">=3.10,<=3.13"
 pyyaml = "^6.0.1"
 streamlit = "*"
+watchdog = "^4.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.7.1"
