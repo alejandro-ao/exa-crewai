@@ -1,0 +1,4 @@
+[flake8]
+docstring-convention = google
+max_complexity = 10
+max_line_length = 120

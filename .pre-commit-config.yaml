@@ -1,0 +1,146 @@
+ci:
+  autoupdate_schedule: monthly
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.6.0
+  hooks:
+  - id: check-added-large-files
+    args: [--maxkb=99000]
+  - id: check-case-conflict
+  - id: check-docstring-first
+  - id: check-json
+  - id: check-merge-conflict
+  - id: check-symlinks
+  - id: check-toml
+  - id: check-xml
+  - id: sort-simple-yaml
+  - id: check-yaml
+  - id: debug-statements
+  - id: detect-private-key
+  - id: fix-byte-order-marker
+  - id: mixed-line-ending
+  - id: trailing-whitespace
+    args: [--markdown-linebreak-ext=md]
+  - id: debug-statements
+  - id: name-tests-test
+  - id: requirements-txt-fixer
+  - id: check-executables-have-shebangs
+  - id: check-ast
+
+- repo: https://github.com/asottile/dead
+  rev: v1.5.2
+  hooks:
+  - id: dead
+
+- repo: https://github.com/PyCQA/autoflake
+  rev: v2.3.1
+  hooks:
+  - id: autoflake
+    args: [--remove-unused-variables, --remove-all-unused-imports]
+
+- repo: https://github.com/nbQA-dev/nbQA
+  rev: 1.8.5
+  hooks:
+  - id: nbqa-black
+    args: [--nbqa-shell]
+    additional_dependencies: [jupytext]    # optional, only if you're using Jupytext
+  - id: nbqa-pyupgrade
+    args: [--py37-plus]
+  - id: nbqa-isort
+    args: [--float-to-top]
+
+- repo: https://github.com/RobertCraigie/pyright-python
+  rev: v1.1.364
+  hooks:
+  - id: pyright
+
+- repo: https://github.com/pycqa/isort
+  rev: 5.13.2
+  hooks:
+  - id: isort
+    name: isort (python)
+    args: [--profile, black]
+
+- repo: https://github.com/psf/black
+  rev: 24.4.2
+  hooks:
+  - id: black
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.4.5
+  hooks:
+  - id: ruff
+    args: [--fix, --exit-non-zero-on-fix, --show-fixes]
+
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v1.10.0
+  hooks:
+  - id: mypy
+    args: [--ignore-missing-imports, --no-implicit-optional, --disallow-untyped-defs]
+    pass_filenames: true
+    additional_dependencies:
+    - types-requests
+    - types-certifi
+    - types-PyYAML
+    - pytest
+
+- repo: https://github.com/pappasam/toml-sort
+  rev: v0.23.1
+  hooks:
+  - id: toml-sort
+    name: toml-sort
+    entry: toml-sort
+    args: [--check]
+    language: python
+    types: [toml]
+  - id: toml-sort-fix
+    name: toml-sort-fix
+    entry: toml-sort
+    args: [--in-place]
+    language: python
+    types: [toml]
+
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.13.0
+  hooks:
+  - id: pretty-format-toml
+    name: Pretty format TOML
+    description: This hook sets a standard for formatting TOML files.
+    entry: pretty-format-toml
+    language: python
+    types: [toml]
+    minimum_pre_commit_version: '1'
+    args: [--autofix]
+  - id: pretty-format-yaml
+    name: Pretty format YAML
+    description: This hook sets a standard for formatting YAML files.
+    entry: pretty-format-yaml
+    language: python
+    types: [yaml]
+    minimum_pre_commit_version: '1'
+    args: [--autofix, --indent, '2']
+
+- repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
+  rev: v0.1.0
+  hooks:
+  - id: dockerfilelint
+    stages: [commit]
+
+- repo: https://github.com/koalaman/shellcheck-precommit
+  rev: v0.10.0
+  hooks:
+  - id: shellcheck
+    args: [--shell=bash]      # Adjust this if you're using a different shell
+
+- repo: https://github.com/pycqa/bandit
+  rev: 1.7.8
+  hooks:
+  - id: bandit
+    args: [-iii, -ll]
+
+- repo: https://github.com/pycqa/flake8
+  rev: 7.0.0
+  hooks:
+  - id: flake8
+    additional_dependencies: [flake8-bugbear, flake8-comprehensions, flake8-mutable, flake8-print, flake8-simplify, flake8-docstrings-complete]

@@ -1,3 +1,7 @@
 .env
 __pycache__/
-logs/
+logs/*
+.mypy_cache/
+.vscode/
+.idea/
+.DS_Store
