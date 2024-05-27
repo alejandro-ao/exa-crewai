@@ -9,7 +9,7 @@ name = "newsletter_gen"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-crewai = "*"
+crewai = {extras = ["tools"], version = "*"}
 exa-py = "*"
 langchain = "*"
 langchain-anthropic = "*"
