@@ -5,3 +5,4 @@ logs/*
 .vscode/
 .idea/
 .DS_Store
+poetry.lock
