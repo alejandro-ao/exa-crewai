@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import streamlit as st
 
 from newsletter_gen.crew import NewsletterGenCrew
@@ -13,9 +15,22 @@ class NewsletterGenUI:
         Load the HTML template for the newsletter
 
         Returns:
-        - html_template: str: The HTML template for the newsletter
+            html_template (str): The HTML template for the newsletter
+
+        Raises:
+            FileNotFoundError: If the HTML template file is not found.
         """
-        with open("src/newsletter_gen/config/newsletter_template.html", "r") as file:
+
+        # check if the file exists
+        html_template_filepath = Path(
+            "src/newsletter_gen/config/newsletter_template.html"
+        )
+
+        if not html_template_filepath.exists():
+            raise FileNotFoundError("HTML template file not found.")
+
+        # Load the HTML template from a file
+        with open(html_template_filepath, "r", encoding="utf-8") as file:
             html_template = file.read()
 
         return html_template
