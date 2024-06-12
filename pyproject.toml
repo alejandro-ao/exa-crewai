@@ -1,24 +1,30 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
 [tool.poetry]
+authors = ["Your Name <you@example.com>"]
+description = "newsletter-gen using crewAI"
 name = "newsletter_gen"
 version = "0.1.0"
-description = "newsletter-gen using crewAI"
-authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
+crewai = {extras = ["tools"], version = "*"}
+exa-py = "*"
+langchain = "*"
+langchain-anthropic = "*"
+langchain-core = "*"
+langchain-google-genai = "*"
+langchain-groq = "*"
+langchain-openai = "*"
+pillow = "*"
 python = ">=3.10,<=3.13"
-crewai = {extras = ["tools"], version = "^0.28.7"}
-exa-py = "^1.0.9"
-langchain = "0.1.17"
-langchain-core = "0.1.52"
-langchain-anthropic = "^0.1.11"
-langchain-groq = "^0.1.3"
-streamlit = "^1.34.0"
-langchain-google-genai = "^1.0.3"
-pillow = "^10.3.0"
+pyyaml = "^6.0.1"
+streamlit = "*"
+watchdog = "^4.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.1"
 
 [tool.poetry.scripts]
 newsletter_gen = "newsletter_gen.main:run"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
